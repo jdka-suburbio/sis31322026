@@ -1,0 +1,35 @@
+/*
+h1, h2 {
+    color: rgb(0, 225, 255);
+    background-color: rgb(208, 255, 0);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 100px;
+    text-align: center;
+}
+*/
+.main-title, h2 {
+    color: rgb(0, 225, 255);
+    background-color: rgb(208, 255, 0);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 100px;
+    text-align: center;
+}
+
+.sub-title {
+    color: rgb(106, 124, 221);
+    background-color: rgb(201, 220, 121);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 100px;
+    text-align: center;
+}
+
+#description {
+    font-size: 26px;
+}
+
+.border {
+    border: 5px solid rgb(0, 0, 0);
+    padding: 10px;
+    margin-left: 35px;
+}
+
