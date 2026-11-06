@@ -33,3 +33,42 @@ h1, h2 {
     margin-left: 35px;
 }
 
+.perfil {
+    max-width: 420px;
+    margin: 30px auto;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    background: #f9f9f9;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#profile-photo {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+    margin-bottom: 15px;
+}
+
+#profile-name {
+    margin: 10px 0;
+    color: #333;
+}
+
+#profile-email {
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.profile-details {
+    text-align: left;
+    font-size: 16px;
+}
+
+.profile-details p {
+    margin: 8px 0;
+}
+
