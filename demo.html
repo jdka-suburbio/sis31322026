@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presentación: Hundimiento del Titanic</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #081a2d 0%, #0f2d4d 50%, #183f63 100%);
+            color: #eaf5ff;
+        }
+
+        .presentation {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .slide-wrapper {
+            width: min(100%, 1200px);
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            min-height: 680px;
+            background: rgba(10, 24, 38, 0.82);
+            border: 1px solid rgba(179, 216, 255, 0.2);
+            border-radius: 22px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+            padding: 42px 52px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(129, 190, 255, 0.08), rgba(255, 255, 255, 0.02));
+            pointer-events: none;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #ffff0c;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        h1, h2, h3, p, ul {
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: clamp(2.8rem, 5vw, 5rem);
+            line-height: 1.05;
+            margin-bottom: 18px;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 3vw, 3.2rem);
+            margin-bottom: 18px;
+        }
+
+        p, li {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #dfeeff;
+        }
+
+        .title-page {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            min-height: 560px;
+        }
+
+        .title-copy {
+            flex: 1.2;
+        }
+
+        .title-illustration {
+            flex: 0.8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ship-emoji {
+            font-size: 180px;
+            filter: drop-shadow(0 15px 25px rgba(123, 188, 255, 0.35));
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 28px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 24px 18px;
+            text-align: center;
+        }
+
+        .stat-box .value {
+            display: block;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #8fd0ff;
+        }
+
+        .stat-box .label {
+            display: block;
+            margin-top: 8px;
+            color: #dfeeff;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 24px 20px;
+        }
+
+        ul {
+            padding-left: 24px;
+            margin-bottom: 0;
+        }
+
+        .timeline {
+            display: grid;
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .timeline-date {
+            min-width: 92px;
+            background: #8fd0ff;
+            color: #061827;
+            border-radius: 999px;
+            font-weight: 700;
+            text-align: center;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+        }
+
+        .danger {
+            color: #ffb7b7;
+            font-weight: 700;
+        }
+
+        .final-box {
+            margin-top: 28px;
+            background: linear-gradient(135deg, rgba(143, 208, 255, 0.12), rgba(255, 255, 255, 0.04));
+            border-radius: 18px;
+            padding: 24px 20px;
+            border: 1px solid rgba(143, 208, 255, 0.35);
+        }
+
+        .controls {
+            margin-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #9ed6ff, #68b8ff);
+            color: #061827;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #eaf5ff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            display: inline-block;
+        }
+
+        .dot.active {
+            background: #8fd0ff;
+            box-shadow: 0 0 12px rgba(143, 208, 255, 0.8);
+        }
+
+        @media (max-width: 760px) {
+            .slide {
+                padding: 28px 22px;
+                min-height: 620px;
+            }
+
+            .title-page,
+            .two-column {
+                grid-template-columns: 1fr;
+                display: grid;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-wrapper">
+            <section class="slide active">
+                <div class="slide-content title-page">
+                    <div class="title-copy">
+                        <div class="eyebrow">Historia marítima</div>
+                        <h1>El hundimiento del Titanic</h1>
+                        <p>
+                            Un viaje de lujo que se convirtió en una de las tragedias más famosas de la historia del mar.
+                        </p>
+                        <div class="stats">
+                            <div class="stat-box">
+                                <span class="value">2,224</span>
+                                <span class="label">Pasajeros y tripulación</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="value">1,500+</span>
+                                <span class="label">Muertes</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="value">1912</span>
+                                <span class="label">Año del desastre</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="title-illustration">
+                        <div class="ship-emoji">🚢</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide">
+                <div class="slide-content">
+                    <div class="eyebrow">Antecedentes</div>
+                    <h2>Un barco gigantesco y muy confiado</h2>
+                    <div class="two-column">
+                        <div>
+                            <p>
+                                El Titanic fue el transatlántico más grande y moderno de su época. Se construyó con una gran reputación,
+                                pensando que era prácticamente invulnerable ante cualquier peligro del océano.
+                            </p>
+                            <p>
+                                Su diseño incluía compartimentos estancos, butacas lujosas y una sensación de seguridad en la que muchos pasajeros
+                                confiaban demasiado.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <p><strong>Características:</strong></p>
+                            <ul>
+                                <li>Longitud aproximada de 269 metros</li>
+                                <li>Capacidad para más de 2,000 personas</li>
+                                <li>Velocidad y lujo sin precedentes</li>
+                                <li>Considerado un símbolo de progreso</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide">
+                <div class="slide-content">
+                    <div class="eyebrow">Dato controvertido</div>
+                    <h2>El Titanic no era el “barco nuevo”</h2>
+                    <p>
+                        En realidad, el barco asociado a la tragedia era parte de una historia más compleja: el <strong>Olympic</strong>,
+                        un transatlántico anterior, fue reutilizado, maquillado y presentado como si fuera el Titanic para generar más atención,
+                        prestigio y, según algunas versiones, beneficiar reclamaciones de seguros.
+                    </p>
+                    <div class="card">
+                        <p><strong>Idea clave:</strong> la historia comercial y la manipulación de la imagen del buque también formaron parte del relato.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide">
+                <div class="slide-content">
+                    <div class="eyebrow">Caso curioso</div>
+                    <h2>J. P. Morgan canceló su viaje</h2>
+                    <p>
+                        El magnate financiero <strong>John Pierpont Morgan</strong> había planeado viajar en el Titanic, pero canceló su pasaje horas antes
+                        de la salida. Esa decisión ha sido recordada como un hecho extraño y simbólico, porque evitó formar parte de la tragedia.
+                    </p>
+                    <div class="card">
+                        <p><strong>Pregunta histórica:</strong> ¿Fue una simple decisión empresarial o un presagio de algo más?</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide">
+                <div class="slide-content">
+                    <div class="eyebrow">El rumbo</div>
+                    <h2>La noche del desastre</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">23:40</div>
+                            <div>
+                                <p>Se reporta un iceberg cercano. La tripulación intenta maniobrar, pero el barco no puede girar a tiempo.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">23:49</div>
+                            <div>
+                                <p>El Titanic impacta contra un bloque de hielo. El golpe provoca daños graves en varios compartimentos.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">00:15</div>
+                            <div>
+                                <p>Se ordena evacuar de forma urgente, pero la falta de botes salvavidas suficientes aumenta la tragedia.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide">
+                <div class="slide-content">
+                    <div class="eyebrow">Impacto</div>
+                    <h2>Consecuencias humanas y sociales</h2>
+                    <div class="two-column">
+                        <div class="card">
+                            <p class="danger">La tragedia dejó un dolor inmenso.</p>
+                            <ul>
+                                <li>Millones de personas siguieron la noticia en todo el mundo.</li>
+                                <li>Se cuestionó la seguridad de los barcos modernos.</li>
+                                <li>Se reforzó la idea de que la tecnología no reemplaza la prudencia.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>
+                                El hundimiento del Titanic cambió la historia de la navegación. A partir de ese momento, se hicieron cambios en las normas
+                                de seguridad, número de botes salvavidas y reglas para la vigilancia en el mar.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide">
+                <div class="slide-content">
+                    <div class="eyebrow">Conclusión</div>
+                    <h2>Lección histórica</h2>
+                    <p>
+                        El Titanic no fue solo un barco famoso; fue un símbolo del orgullo humano, la innovación y la tragedia que puede surgir cuando
+                        la confianza supera la preparación. Su historia sigue viva porque enseña que la seguridad es más importante que la apariencia o la arrogancia.
+                    </p>
+                    <div class="final-box">
+                        <p><strong>En resumen:</strong> la grandeza del Titanic no estuvo en su éxito, sino en la lección que dejó tras su hundimiento.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="controls">
+                <div class="nav-buttons">
+                    <button class="btn-secondary" id="prevBtn">Anterior</button>
+                    <button class="btn-primary" id="nextBtn">Siguiente</button>
+                </div>
+                <div class="dots" aria-label="Indicadores de diapositiva">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            currentSlide = (index + slides.length) % slides.length;
+
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === currentSlide);
+            });
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+
+            prevBtn.textContent = 'Anterior';
+            nextBtn.textContent = currentSlide === slides.length - 1 ? 'Final' : 'Siguiente';
+        }
+
+        prevBtn.addEventListener('click', () => {
+            showSlide(currentSlide - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide === slides.length - 1) {
+                showSlide(0);
+            } else {
+                showSlide(currentSlide + 1);
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight' || event.key === 'PageDown') {
+                showSlide(currentSlide + 1);
+            }
+            if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+                showSlide(currentSlide - 1);
+            }
+        });
+
+        showSlide(0);
+    </script>
+</body>
+</html>
